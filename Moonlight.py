@@ -8,8 +8,8 @@ class Moonlight:
 		self.ip = ip
 
 		#Other
-		self.executable = "/usr/local/bin/moonlight"
-		self.workingdir = "/home/pi/MoonLightLauncher/bin"
+		self.executable = "moonlight"
+		self.workingdir = "bin"
 		self.proc = None
 
 	def loadConfig(self):
@@ -26,8 +26,16 @@ class Moonlight:
 		with open("config.txt","w") as outfile:
 			json.dump(self.config,outfile)
 
-	def execute(self,args):
-		self.proc = subprocess.Popen([self.executable]+args+[self.ip],stdout=subprocess.PIPE, stderr=subprocess.STDOUT,cwd=self.workingdir)
+	def execute(self,args,includeip=True):
+		ar = [self.executable]
+		ar += args
+		if includeip:
+			ar += [self.ip]
+
+		if not os.path.exists(self.workingdir):
+			os.makedirs(self.workingdir)
+
+		self.proc = subprocess.Popen(ar,stdout=subprocess.PIPE, stderr=subprocess.STDOUT,cwd=self.workingdir)
 		return self.proc
 
 	def listGames(self):

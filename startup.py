@@ -32,7 +32,6 @@ class QuitThread(threading.Thread):
 		print "Quit thread running"
 		while self.running:
 			if self.active:
-				print("Checking {0}".format(time.time()))
 				if self.joy.get_button(4) and self.joy.get_button(5) and self.joy.get_button(6):
 					print("Force stream quit!")
 					Startup.menu.msg("Stopping stream")
@@ -49,7 +48,7 @@ class Startup:
 	def main(self):
 		# Initialize Startup
 		if len(sys.argv) != 2:
-			print("Correct usage: Startup.py <ip address>")
+			print("Correct usage: startup.py <ip address> or startup.py mapping")
 			sys.exit(1)
 
 		# Set working directory
@@ -89,9 +88,13 @@ class Startup:
 
 		print("Initializing menu")
 		self.menu = Menu(self,self.screen)
-		self.thread = QuitThread()
-		self.thread.start()
-		self.loadMainMenu()
+
+		if sys.argv[1] == "map":
+			self.loadMapping()
+		else:
+			self.thread = QuitThread()
+			self.thread.start()
+			self.loadMainMenu()
 
 	def loadMainMenu(self):
 		self.loaded = 1
@@ -107,6 +110,16 @@ class Startup:
 		elif out == 3:
 			os.system("halt")
 
+	def loadMapping(self,loadMainMenu=False):
+		proc = self.moonlight.execute(["map","mapping.map"],False)
+		while True:
+			line = proc.stdout.readline()
+			if line == '':
+				break
+			self.menu.msg(line.rstrip())
+		if loadMainMenu:
+			self.loadMainMenu()
+
 	def loadPair(self):
 		self.loaded = 2
 		self.menu.msg("Pairing with PC",desc="Please wait")
@@ -116,7 +129,7 @@ class Startup:
 			if line == '':
 				break
 			if "PIN on the target PC" in line:
-				self.menu.msg("Pairing with PC",desc="Enter the following PIN on PC: {0}".format(line.rstrip()[-4:]))
+				self.menu.msg(str(line.rstrip()[-4:]),desc="Enter above PIN on PC")
 		proc.wait()
 
 	def loadStream(self):
@@ -143,6 +156,7 @@ class Startup:
 					if line == '':
 						break
 					self.menu.msg("Stream starting",desc=line.rstrip())
+				self.menu.msg("Please wait",desc="Waiting for process to end")
 				proc.wait()
 				self.menu.setColors()
 				self.loadMainMenu()
@@ -150,7 +164,7 @@ class Startup:
 	def loadSettings(self):
 		self.loaded = 4
 		# Create Settings menu items
-		items = [Label(i) for i in ["Resolution", "Framerate","Bitrate","Packetsize","Force quit stream","Back"]]
+		items = [Label(i) for i in ["Resolution", "Framerate","Bitrate","Packetsize","Force quit stream","Map gamepad","Back"]]
 		cfg = self.moonlight.getConfig()
 		if "width" in cfg: 
 			if "height" in cfg: 
@@ -245,6 +259,8 @@ class Startup:
 			self.menu.msg("Quittting all games")
 			self.moonlight.quit()
 			self.loadSettings()
+		elif out == 5:
+			self.loadMapping(True)
 		elif out == 5:
 			self.loadMainMenu()
 

@@ -131,22 +131,35 @@ class Menu:
 				#print("Btn: {0}".format(event.button))
 				if event.button == 0:
 					return selected
-				elif event.button == 14 and selected < len(items)-1:
-					selected += 1
+				elif event.button == 14:
 					redraw = True
-				elif event.button == 13 and selected > 0:
-					selected -= 1
+					if selected < len(items)-1:
+							selected += 1
+					else:
+						selected = 0
+				elif event.button == 13:
 					redraw = True
+					if selected > 0:
+							selected -= 1
+					else:
+						selected = len(items)-1
+					
 			
 			#Check for gamepad axis
 			for event in pygame.event.get(JOYAXISMOTION):
 				if event.axis == 1:
-					if event.value < -0.5 and prevaxis >= -0.5 and selected > 0:
+					if event.value < -0.5 and prevaxis >= -0.5:
 						redraw = True
-						selected -= 1
-					elif event.value > 0.5 and prevaxis <= 0.5 and selected < len(items)-1:
+						if selected > 0:
+							selected -= 1
+						else:
+							selected = len(items)-1
+					elif event.value > 0.5 and prevaxis <= 0.5:
 						redraw = True
-						selected += 1
+						if selected < len(items)-1:
+							selected += 1
+						else:
+							selected = 0
 					prevaxis = event.value
 
 			#Check for mouse clicks
@@ -157,10 +170,16 @@ class Menu:
 							return selected
 				elif event.button == 4 and selected > 0:
 					redraw = True
-					selected -= 1
+					if selected > 0:
+						selected -= 1
+					else:
+						selected = len(items)-1
 				elif event.button == 5 and selected < len(items)-1:
 					redraw = True
-					selected += 1
+					if selected < len(items)-1:
+						selected += 1
+					else:
+						selected = 0
 				elif event.button == 2:
 					return selected
 
