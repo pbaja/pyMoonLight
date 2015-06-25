@@ -81,7 +81,8 @@ class Moonlight:
 			args.append("-input")
 			args.append(str(self.config["input"]))
 		if "localaudio" in self.config:
-			args.append("-localaudio")
+			if self.config["localaudio"] != 0:
+				args.append("-localaudio")
 		if app:
 			args.append("-app")
 			args.append(app)

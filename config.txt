@@ -1,1 +1,1 @@
-{"width": 1280, "framerate": 60, "bitrate": 6000, "packetsize": 1024, "height": 720}
+{"width": 1280, "bitrate": 6000, "localaudio": 0, "packetsize": 1024, "framerate": 60, "height": 720}

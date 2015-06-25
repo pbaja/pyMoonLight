@@ -48,7 +48,7 @@ class Startup:
 	def main(self):
 		# Initialize Startup
 		if len(sys.argv) != 2:
-			print("Correct usage: startup.py <ip address> or startup.py mapping")
+			print("Correct usage: startup.py <ip address> or startup.py map")
 			sys.exit(1)
 
 		# Set working directory
@@ -164,7 +164,7 @@ class Startup:
 	def loadSettings(self):
 		self.loaded = 4
 		# Create Settings menu items
-		items = [Label(i) for i in ["Resolution", "Framerate","Bitrate","Packetsize","Force quit stream","Map gamepad","Back"]]
+		items = [Label(i) for i in ["Resolution", "Framerate","Bitrate","Packetsize","Local audio","Force quit stream","Map gamepad","Back"]]
 		cfg = self.moonlight.getConfig()
 		if "width" in cfg: 
 			if "height" in cfg: 
@@ -175,6 +175,11 @@ class Startup:
 			items[2].setDesc("{0}Kbps".format(cfg["bitrate"]))
 		if "packetsize" in cfg:
 			items[3].setDesc("{0}b".format(cfg["packetsize"]))
+		if "localaudio" in cfg:
+			if cfg["localaudio"] == 0:
+				items[4].setDesc("Disabled")
+			else:
+				items[4].setDesc("Enabled")
 
 		# Display settings menu and wait for response
 		out = self.menu.menu(items, title=Label("Settings"))
@@ -256,12 +261,22 @@ class Startup:
 				self.moonlight.saveConfig()
 				self.loadSettings()
 		elif out == 4:
+			items = [Label(i) for i in ["Enabled","Disabled"]]
+			out = self.menu.menu(items,title=Label("Local audio"),desc=Label("If enabled, audio will play on target, not here."))
+			if out == 0:
+				self.moonlight.config["localaudio"] = 1
+			elif out == 1:
+				self.moonlight.config["localaudio"] = 0
+			if out != -1:
+				self.moonlight.saveConfig()
+				self.loadSettings()
+		elif out == 5:
 			self.menu.msg("Quittting all games")
 			self.moonlight.quit()
 			self.loadSettings()
-		elif out == 5:
+		elif out == 6:
 			self.loadMapping(True)
-		elif out == 5:
+		elif out == 7:
 			self.loadMainMenu()
 
 if __name__ == "__main__":
