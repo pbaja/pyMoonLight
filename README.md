@@ -1,10 +1,7 @@
 # pyMoonlight  
 Graphical User Interface for Moonlight-embedded, uses pyGame to display gui in framebuffer and catch Joystick, mouse and keyboard input. No X server needed!   
   
-#### Work in progress!  
-  
-![Settings menu](http://i.imgur.com/hpn2HJh.png)
-![Main menu](http://i.imgur.com/qQB2fwe.png)
+#### Project for own purposes, abandoned, you can use the source code freely.  
   
 # Usage  
 - (Compile and) Install python 2.7  
