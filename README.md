@@ -7,7 +7,8 @@ Graphical User Interface for Moonlight-embedded, uses pyGame to display gui in f
 - (Compile and) Install python 2.7  
 - (Compile and) Install latest [pyGame](http://www.pygame.org/wiki/Compilation)  
 - (Compile and) Install latest [Moonlight-embedded](https://github.com/irtimmer/moonlight-embedded)  
-- Download pyMoonlight to your favorite folder  
+- (Compile and) Install latest [Pexpect](https://pexpect.readthedocs.io/en/stable/)
+- Download pyMoonlight to your favorite folder
 - Connect Joystick/Mouse  
 - Run via *sudo python startup.py ip_adress*  
   
