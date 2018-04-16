@@ -81,10 +81,8 @@ class Moonlight:
             args.append("-height")
             args.append(str(self.config["height"]))
         if "framerate" in self.config:
-            if self.config["framerate"] == 30:
-                args.append("-30fps")
-            elif self.config["framerate"] == 60:
-                args.append("-60fps")
+            args.append("-fps")
+            args.append(str(self.config["framerate"]))
         if "bitrate" in self.config:
             args.append("-bitrate")
             args.append(str(self.config["bitrate"]))
